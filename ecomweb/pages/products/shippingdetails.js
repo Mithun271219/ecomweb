@@ -19,14 +19,17 @@ function shippingdetails() {
         router.push('/')
     };
 
+    // Use empty object as default value if user or address is undefined
+    //  let userAddress = user?.address || {}
+
     return (
         <>
             <div className='container'>
                 <h2>Shipping Details</h2>
                 <div className='row'>
-                    <Typography variant='h5'>Name: {user.firstName}</Typography>
-                    <Typography variant='h5'>Phone Number: {user.phone}</Typography>
-                    <Typography variant='h5'>Address: {user.address.address}, {user.address.city}, {user.address.postalCode}, {user.address.state} </Typography>
+                    <Typography variant='h5'>Name: {user?.firstName}</Typography>
+                    <Typography variant='h5'>Phone Number: {user?.phone}</Typography>
+                    <Typography variant='h5'>Address: {user?.address?.address}, {user?.address?.city}, {user?.address?.postalCode}, {user?.address?.state} </Typography>
                     <Typography variant='caption'><Checkbox /> I accept the tems and services of the company and i knows that there is no return or replacement of products which i am buying from this website</Typography>
                 </div>
                 <Button variant='contained' color='warning' onClick={handleClickOpen}>Place Order</Button>

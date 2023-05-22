@@ -5,7 +5,7 @@ import { ButtonGroup, Typography, CardContent, CardMedia, Card, Button } from '@
 import { useRouter } from 'next/router';
 import CustomSnackbar from '@/Components/Snackbar';
 
-function cart({ cart }) {
+function cart() {
 
     let router = useRouter()
     let { user, getuser, backendLink } = useContext(Context)
@@ -77,7 +77,7 @@ function cart({ cart }) {
     }
 
     useEffect(() => {
-        let total = user.cart.reduce((acc, ele) => {
+        let total = user?.cart?.reduce((acc, ele) => {
             return acc + (Math.round(ele.price - (ele.price * ele.discountPercentage / 100)) * ele.quantity)
         }, 0)
         setsum(total)
@@ -86,7 +86,7 @@ function cart({ cart }) {
     return (
         <div className='container'>
             {
-                user.cart.map((item, index) => {
+                user?.cart?.map((item, index) => {
                     return (
                         <div key={index}>
                             <div className='d-flex justify-content-center allign-item-center  my-3'>
