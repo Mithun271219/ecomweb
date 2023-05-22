@@ -71,3 +71,13 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+.css-1qsxih2 {
+    width: 100%;
+    margin-left: auto;
+    box-sizing: border-box;
+    margin-right: auto;
+    /* display: block; */
+    padding-left: 16px;
+    padding-right: 16px;
+}
