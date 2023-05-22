@@ -4,11 +4,13 @@ import { usernamevalidation } from '@/Components/Schemas/ForgetPassword/Username
 import { useRouter } from 'next/router'
 import { Container, Button, TextField, CircularProgress } from '@mui/material'
 import axios from 'axios'
+import Context from '@/Components/Context/Context'
 
 function forgetpassword() {
 
     let router = useRouter();
     const [loading, setLoading] = useState(false);
+    let { backendLink } = useContext(Context)
 
 
     let initialValues = {
@@ -21,7 +23,7 @@ function forgetpassword() {
         onSubmit: async (values, { resetForm }) => {
             try {
                 setLoading(true)
-                let { data } = await axios.post('http://localhost:5000/users/username', values)
+                let { data } = await axios.post(`${backendLink}/users/username`, values)
                 // resetForm();
                 router.push(`/auth/forgetpassword/reset/${data.username}`)
             } catch ({ response: { data: { message } } }) {

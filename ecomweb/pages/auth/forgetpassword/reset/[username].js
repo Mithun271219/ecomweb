@@ -5,12 +5,16 @@ import { Button, Typography, TextField, Container, CircularProgress } from '@mui
 import { resetpasswordvalidation } from '@/Components/Schemas/ForgetPassword/passwordvalidation-schema';
 import axios from 'axios';
 import CustomSnackbar from '@/Components/Snackbar';
+import { useContext } from 'react';
+import Context from '@/Components/Context/Context';
 
 function reset() {
 
     let { query } = useRouter();// let context=useRouter and let {username}=router.query
     const [loading, setLoading] = useState(false);
     let router = useRouter();
+
+    let { backendLink } = useContext(Context)
 
     //snackbar
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -29,7 +33,7 @@ function reset() {
         onSubmit: async (values, { resetForm }) => {
             try {
                 setLoading(true)
-                let response = await axios.put(`http://localhost:5000/users/reset/password/${query.username}`, values)
+                let response = await axios.put(`${backendLink}/users/reset/password/${query.username}`, values)
                 // resetForm();
                 setSnackbarMessage(response.data.message)
                 setSnackbarSeverity('success')
@@ -68,10 +72,7 @@ function reset() {
                         <CustomSnackbar open={snackbarOpen} message={snackbarMessage} severity={snackbarSeverity} onClose={handleSnackbarClose} />
                     </Container >
             }
-
-
         </>
-
     )
 }
 

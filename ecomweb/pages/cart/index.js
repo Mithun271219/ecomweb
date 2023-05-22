@@ -8,7 +8,7 @@ import CustomSnackbar from '@/Components/Snackbar';
 function cart({ cart }) {
 
     let router = useRouter()
-    let { user, getuser } = useContext(Context)
+    let { user, getuser, backendLink } = useContext(Context)
     let [sum, setsum] = useState(0)
 
     //snackbar
@@ -24,7 +24,7 @@ function cart({ cart }) {
             quantity = quantity - 1;
             if (quantity === 0) {
                 try {
-                    let resposne = await axios.put('http://localhost:5000/user/removefromcart', { id: id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                    let resposne = await axios.put(`${backendLink}/user/removefromcart`, { id: id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                     getuser();
                     setSnackbarMessage(resposne.data.message)
                     setSnackbarSeverity('warning')
@@ -38,7 +38,7 @@ function cart({ cart }) {
                 }
             } else {
                 try {
-                    let resposne = await axios.put('http://localhost:5000/user/alterquantity', { id, quantity }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                    let resposne = await axios.put(`${backendLink}/user/alterquantity`, { id, quantity }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                     getuser();
                     setSnackbarMessage(resposne.data.message)
                     setSnackbarSeverity('success')
@@ -58,7 +58,7 @@ function cart({ cart }) {
         let id = user.cart[index].id;
         let quantity = user.cart[index].quantity + 1;
         try {
-            let response = await axios.put('http://localhost:5000/user/alterquantity', { id, quantity }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            let response = await axios.put(`${backendLink}/user/alterquantity`, { id, quantity }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             getuser();
             setSnackbarMessage(response.data.message)
             setSnackbarSeverity('success')

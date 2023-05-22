@@ -12,7 +12,7 @@ function reset() {
     let { query } = useRouter();// let context=useRouter and let {username}=router.query
     const [loading, setLoading] = useState(false);
     let router = useRouter();
-    let { user } = useContext(Context);
+    let { user, backendLink } = useContext(Context);
 
     //snackbar
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -31,7 +31,7 @@ function reset() {
         onSubmit: async (values, { resetForm }) => {
             try {
                 setLoading(true)
-                let response = await axios.put('http://localhost:5000/user/auth/reset/password', values, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                let response = await axios.put(`${backendLink}/user/auth/reset/password`, values, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 // resetForm();
                 router.push('/')
                 setSnackbarMessage(response.data.message)

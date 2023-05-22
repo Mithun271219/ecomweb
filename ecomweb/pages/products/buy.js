@@ -4,12 +4,10 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import { Card, CardContent, CardMedia, Typography, ButtonGroup, Button } from '@mui/material';
 
-let api = 'http://localhost:5000'
 
 function buy({ product }) {
 
-    let { cartlist, setcartlist } = useContext(Context)
-
+    let { backendLink } = useContext(Context)
     let [quantity, serQuantity] = useState(1)
     let [cartitems, setCartitems] = useState(quantity);
 
@@ -68,7 +66,7 @@ function buy({ product }) {
 export default buy
 
 export async function getServerSideProps({ query }) {
-    let { data } = await axios.get(`${api}/products/getbyid/${query.productID}`)
+    let { data } = await axios.get(`https://ecomweb-backend.onrender.com/products/getbyid/${query.productID}`)
     return {
         props: {
             product: data

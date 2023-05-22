@@ -4,21 +4,21 @@ import axios from "axios";
 
 export default function ContextState({ children }) {
 
+    const backendLink = `https://ecomweb-backend.onrender.com`
+
     const [isLogin, setIsLogin] = useState(false)
     const [products, setProducts] = useState([])
     const [signUpData, setSignUpData] = useState([]);
     let [user, setUser] = useState('');
 
     async function getproducts() {
-        // let cartitems = await axios.get(`http://localhost:5000/users/1`)
-        // setcartlist(cartitems.data.cart)
-        let { data } = await axios.get('http://localhost:5000/products');
+        let { data } = await axios.get(`${backendLink}/products`);
         setProducts(data);
     }
 
     async function getuser() {
         try {
-            let { data } = await axios.get('http://localhost:5000/user', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+            let { data } = await axios.get(`${backendLink}/user`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             setUser(data);
             setIsLogin(true)
         } catch (error) {
@@ -33,7 +33,7 @@ export default function ContextState({ children }) {
 
 
     return (
-        <Context.Provider value={{ products, setProducts, user, setUser, isLogin, setIsLogin, getuser, signUpData, setSignUpData }}>
+        <Context.Provider value={{ backendLink, products, setProducts, user, setUser, isLogin, setIsLogin, getuser, signUpData, setSignUpData }}>
             {children}
         </Context.Provider>
     )

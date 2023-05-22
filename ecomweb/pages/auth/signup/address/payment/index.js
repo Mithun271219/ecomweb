@@ -10,7 +10,7 @@ import CustomSnackbar from '@/Components/Snackbar';
 
 function payment() {
 
-    let { signUpData, setSignUpData } = useContext(Context);
+    let { backendLink, signUpData, setSignUpData } = useContext(Context);
     let router = useRouter();
 
     //snackbar
@@ -33,7 +33,7 @@ function payment() {
         validationSchema: bankSchema,
         onSubmit: async (values) => {
             try {
-                let response = await axios.post('http://localhost:5000/auth/users/signup', { ...signUpData, bank: values.bank })
+                let response = await axios.post(`${backendLink}/auth/users/signup`, { ...signUpData, bank: values.bank })
                 setSnackbarMessage(response.data.message)
                 setSnackbarSeverity('success')
                 setSnackbarOpen(true)

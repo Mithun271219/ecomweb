@@ -12,12 +12,10 @@ import Context from '@/Components/Context/Context';
 import SimilarProducts from '@/Components/SimilarProducts';
 import CustomSnackbar from '@/Components/Snackbar';
 
-let api = 'http://localhost:5000'
-
 function product({ product, randomreviews, randomratings, productsByCategory }) {
 
     let router = useRouter();
-    let { user, getuser, isLogin } = useContext(Context)
+    let { user, getuser, isLogin, backendLink } = useContext(Context)
     const [inCart, setinCart] = useState(false)
 
     //snackbar
@@ -39,7 +37,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
 
     async function handelremoveCart(productID) {
         try {
-            let resposne = await axios.put('http://localhost:5000/user/removefromcart', { id: product.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            let resposne = await axios.put(`${backendLink}/user/removefromcart`, { id: product.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             await getuser();
             setinCart(false)
             setSnackbarMessage(resposne.data.message)
@@ -62,7 +60,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
             setSnackbarOpen(true)
         } else {
             try {
-                let addedtocart = await axios.put('http://localhost:5000/user/addtocart', { ...product, quantity: 1 }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+                let addedtocart = await axios.put(`${backendLink}/user/addtocart`, { ...product, quantity: 1 }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
                 await getuser();
                 setinCart(true)
                 setSnackbarMessage(addedtocart.data.message)
@@ -151,8 +149,8 @@ export default product;
 export async function getServerSideProps({ query }) {
     let { productID } = query
 
-    const { data } = await axios.get(`${api}/products/getbyid/${productID}`)
-    let productbycategory = await axios.get(`http://localhost:5000/products/category?category=${data.category}`)
+    const { data } = await axios.get(`https://ecomweb-backend.onrender.com/products/getbyid/${productID}`)
+    let productbycategory = await axios.get(`https://ecomweb-backend.onrender.com/products/category?category=${data.category}`)
     let productsByCategory = productbycategory.data
 
     return {
