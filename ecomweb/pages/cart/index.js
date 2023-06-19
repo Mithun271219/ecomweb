@@ -10,6 +10,9 @@ function cart() {
     let router = useRouter()
     let { user, getuser, backendLink } = useContext(Context)
     let [sum, setsum] = useState(0)
+    let [buttonLoading, setButtonLoding] = useState(false)
+    let [increaseBtn, setIncreaseBtn] = useState(false)
+    let [decrease, setDecreaseBtn] = useState(false)
 
     //snackbar
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -18,9 +21,11 @@ function cart() {
     const handleSnackbarClose = () => { setSnackbarOpen(false) };
 
     async function onDecrease(index) {
+        setButtonLoding(true, () => { })
         let quantity = user.cart[index].quantity;
         let id = user.cart[index].id;
         if (quantity > 0) {
+            setDecreaseBtn(true, () => { })
             quantity = quantity - 1;
             if (quantity === 0) {
                 try {
@@ -35,6 +40,9 @@ function cart() {
                     setSnackbarMessage(response)
                     setSnackbarSeverity('error')
                     setSnackbarOpen(true)
+                } finally {
+                    setButtonLoding(false, () => { })
+                    setDecreaseBtn(false, () => { })
                 }
             } else {
                 try {
@@ -49,12 +57,17 @@ function cart() {
                     setSnackbarMessage(response)
                     setSnackbarSeverity('error')
                     setSnackbarOpen(true)
+                } finally {
+                    setButtonLoding(false, () => { })
+                    setDecreaseBtn(false, () => { })
                 }
             }
         }
     }
 
     async function onIncrease(index) {
+        setButtonLoding(true, () => { })
+        setIncreaseBtn(true, () => { })
         let id = user.cart[index].id;
         let quantity = user.cart[index].quantity + 1;
         try {
@@ -69,6 +82,9 @@ function cart() {
             setSnackbarMessage(response)
             setSnackbarSeverity('error')
             setSnackbarOpen(true)
+        } finally {
+            setButtonLoding(false, () => { })
+            setIncreaseBtn(false, () => { })
         }
     }
 
@@ -105,9 +121,9 @@ function cart() {
                                             {item.title}
                                         </Typography>
                                         <ButtonGroup sx={{ mt: 2 }} color="primary">
-                                            <Button onClick={() => onDecrease(index)}> - </Button>
+                                            <Button onClick={() => onDecrease(index)} disabled={buttonLoading ? true : false}>{decrease ? <span class="loader"></span> : <span>-</span>}</Button>
                                             <Button disabled> {item.quantity} </Button>
-                                            <Button onClick={() => onIncrease(index)}> + </Button>
+                                            <Button onClick={() => onIncrease(index)} disabled={buttonLoading ? true : false}> {increaseBtn ? <span class="loader"></span> : <span>+</span>} </Button>
                                         </ButtonGroup>
                                         <Typography sx={{ mt: 2 }}>
                                             Total Price: {Math.round(item.price - (item.price * item.discountPercentage / 100)) * item.quantity} $
