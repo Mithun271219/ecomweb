@@ -17,6 +17,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
     let router = useRouter();
     let { user, getuser, isLogin, backendLink } = useContext(Context)
     const [inCart, setinCart] = useState(false)
+    const [btnLoading, setBtnLoading] = useState(false)
 
     //snackbar
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -36,6 +37,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
     }
 
     async function handelremoveCart(productID) {
+        setBtnLoading(true, () => { })
         try {
             let resposne = await axios.put(`${backendLink}/user/removefromcart`, { id: product.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             await getuser();
@@ -49,10 +51,13 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
             setSnackbarMessage(response)
             setSnackbarSeverity('error')
             setSnackbarOpen(true)
+        } finally {
+            setBtnLoading(false, () => { })
         }
     }
 
     async function handelAddToCart(productId) {
+        setBtnLoading(true, () => { })
         if (!isLogin) {
             router.push('/auth/signin')
             setSnackbarMessage('Please sign in to continue')
@@ -72,6 +77,8 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
                 setSnackbarMessage(response)
                 setSnackbarSeverity('error')
                 setSnackbarOpen(true)
+            } finally {
+                setBtnLoading(false, () => { })
             }
         }
     }
@@ -113,11 +120,11 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
                 </div>
                 <div className='button-container mx-2'>
                     {
-                        !inCart ? <Button variant="contained" onClick={() => handelAddToCart(product.id)} startIcon={<ShoppingCartOutlinedIcon />}>
-                            Add to Cart
+                        !inCart ? <Button style={{ width: 220 }} variant="contained" onClick={() => handelAddToCart(product.id)} startIcon={<ShoppingCartOutlinedIcon />} disabled={btnLoading ? true : false}>
+                            {btnLoading ? <span className='loader'></span> : <span>Add to Cart</span>}
                         </Button> :
-                            <Button variant="contained" color='error' onClick={() => handelremoveCart(product.id)} startIcon={<ShoppingCartOutlinedIcon />}>
-                                Remove From Cart
+                            <Button style={{ width: 220 }} variant="contained" color='error' onClick={() => handelremoveCart(product.id)} startIcon={<ShoppingCartOutlinedIcon />} disabled={btnLoading ? true : false}>
+                                {btnLoading ? <span className='loader'></span> : <span>Remove From Cart</span>}
                             </Button>
                     }
                     <Button variant="contained" onClick={() => handelBuy(product.id)} startIcon={<ShoppingBagOutlinedIcon />}>

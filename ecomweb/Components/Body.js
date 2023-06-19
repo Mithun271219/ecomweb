@@ -20,8 +20,8 @@ function Body({ products }) {
             {
                 products.map(mobile => {
                     return (
-                        <Link key={mobile.id} href={`/products?productID=${mobile.id}&category=${mobile.category}`}>
-                            <Card className='card-container' >
+                        <Link key={mobile.id} href={`/products?productID=${mobile.id}&category=${mobile.category}`} >
+                            <Card className='card-container'>
                                 <CardActionArea >
                                     <CardMedia>
                                         <Image priority className='card-image' width={200} height={200} src={mobile.thumbnail} alt={mobile.title} />
