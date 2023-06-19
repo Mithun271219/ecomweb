@@ -12,7 +12,7 @@ function shippingdetails() {
 
     let router = useRouter();
 
-    let { user } = useContext(Context);
+    let { user, getuser } = useContext(Context);
 
     //dialog
     const [open, setOpen] = React.useState(false);
@@ -21,6 +21,7 @@ function shippingdetails() {
         try {
             let orderconfirm = await axios.put(apiLink, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             let response = orderconfirm.data.message
+            getuser();
             setOpen(true)
         } catch (error) {
             console.log(error)
