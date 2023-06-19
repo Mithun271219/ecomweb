@@ -21,11 +21,11 @@ function cart() {
     const handleSnackbarClose = () => { setSnackbarOpen(false) };
 
     async function onDecrease(index) {
-        setButtonLoding(true, () => { })
+        setButtonLoding(true)
         let quantity = user.cart[index].quantity;
         let id = user.cart[index].id;
         if (quantity > 0) {
-            setDecreaseBtn(true, () => { })
+            setDecreaseBtn(true)
             quantity = quantity - 1;
             if (quantity === 0) {
                 try {
@@ -41,8 +41,8 @@ function cart() {
                     setSnackbarSeverity('error')
                     setSnackbarOpen(true)
                 } finally {
-                    setButtonLoding(false, () => { })
-                    setDecreaseBtn(false, () => { })
+                    setButtonLoding(false)
+                    setDecreaseBtn(false)
                 }
             } else {
                 try {
@@ -58,16 +58,16 @@ function cart() {
                     setSnackbarSeverity('error')
                     setSnackbarOpen(true)
                 } finally {
-                    setButtonLoding(false, () => { })
-                    setDecreaseBtn(false, () => { })
+                    setButtonLoding(false)
+                    setDecreaseBtn(false)
                 }
             }
         }
     }
 
     async function onIncrease(index) {
-        setButtonLoding(true, () => { })
-        setIncreaseBtn(true, () => { })
+        setButtonLoding(true)
+        setIncreaseBtn(true)
         let id = user.cart[index].id;
         let quantity = user.cart[index].quantity + 1;
         try {
@@ -83,8 +83,8 @@ function cart() {
             setSnackbarSeverity('error')
             setSnackbarOpen(true)
         } finally {
-            setButtonLoding(false, () => { })
-            setIncreaseBtn(false, () => { })
+            setButtonLoding(false)
+            setIncreaseBtn(false)
         }
     }
 
@@ -121,9 +121,9 @@ function cart() {
                                             {item.title}
                                         </Typography>
                                         <ButtonGroup sx={{ mt: 2 }} color="primary">
-                                            <Button onClick={() => onDecrease(index)} disabled={buttonLoading ? true : false}>{decrease ? <span class="loader"></span> : <span>-</span>}</Button>
+                                            <Button onClick={() => onDecrease(index)} disabled={buttonLoading ? true : false}>{decrease ? <span className="loader"></span> : <span>-</span>}</Button>
                                             <Button disabled> {item.quantity} </Button>
-                                            <Button onClick={() => onIncrease(index)} disabled={buttonLoading ? true : false}> {increaseBtn ? <span class="loader"></span> : <span>+</span>} </Button>
+                                            <Button onClick={() => onIncrease(index)} disabled={buttonLoading ? true : false}> {increaseBtn ? <span className="loader"></span> : <span>+</span>} </Button>
                                         </ButtonGroup>
                                         <Typography sx={{ mt: 2 }}>
                                             Total Price: {Math.round(item.price - (item.price * item.discountPercentage / 100)) * item.quantity} $

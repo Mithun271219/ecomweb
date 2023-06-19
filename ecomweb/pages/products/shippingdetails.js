@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Context from '@/Components/Context/Context'
 import { Typography, Button, Checkbox } from '@mui/material';
 import AlertDialogSlide from '@/Components/Dialog';
@@ -7,13 +7,29 @@ import { useRouter } from 'next/router';
 
 function shippingdetails() {
 
+    let apiLink = `https://ecomweb-backend.onrender.com/user/confirmorder`
+    const [loader, setLoader] = useState(false)
+
     let router = useRouter();
 
     let { user } = useContext(Context);
 
     //dialog
     const [open, setOpen] = React.useState(false);
-    const handleClickOpen = () => { setOpen(true) };
+    const handleClickOpen = async () => {
+        setLoader(true)
+        try {
+            let orderconfirm = await axios.put(apiLink, {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+            let response = orderconfirm.data.message
+            setOpen(true)
+        } catch (error) {
+            console.log(error)
+            let response = error.response.data;
+            console.log(response)
+        } finally {
+            setLoader(false)
+        }
+    };
     const handleClose = () => {
         setOpen(false)
         router.push('/')
@@ -32,7 +48,7 @@ function shippingdetails() {
                     <Typography variant='h5'>Address: {user?.address?.address}, {user?.address?.city}, {user?.address?.postalCode}, {user?.address?.state} </Typography>
                     <Typography variant='caption'><Checkbox /> I accept the tems and services of the company and i knows that there is no return or replacement of products which i am buying from this website</Typography>
                 </div>
-                <Button variant='contained' color='warning' onClick={handleClickOpen}>Place Order</Button>
+                <Button variant='contained' color='warning' onClick={handleClickOpen} style={{ width: 150, height: 35 }} disabled={loader ? true : false}>{loader ? <span className='loader'></span> : <span>Place Order</span>}</Button>
             </div>
             <AlertDialogSlide open={open} handleClickOpen={handleClickOpen} handleClose={handleClose} />
         </>

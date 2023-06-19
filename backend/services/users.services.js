@@ -62,6 +62,26 @@ module.exports = {
             res.status(500).json({ message: 'error while removing item from cart' });
         }
     },
+    async updateOrderHistory(req, res) {
+        try {
+            let id = new ObjectId(req.user._id);
+            await this.users.findOneAndUpdate({ id: _id }, { $set: { orderhistory: { ...orderHistory, cart } } })
+            res.json({ message: "orderhistory updated" })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'error while fetching order history' });
+        }
+    },
+    async confirmOrder(req, res) {
+        try {
+            let id = new ObjectId(req.user._id);
+            await this.users.findOneAndUpdate({ _id: id }, { $set: { cart: [] } });
+            res.json({ message: "Ored-Confirmed" })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'error while checking Out your Order' });
+        }
+    },
     async alterQuantity(req, res) {
         try {
             let id = new ObjectId(req.user._id);

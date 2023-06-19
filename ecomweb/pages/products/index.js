@@ -37,7 +37,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
     }
 
     async function handelremoveCart(productID) {
-        setBtnLoading(true, () => { })
+        setBtnLoading(true)
         try {
             let resposne = await axios.put(`${backendLink}/user/removefromcart`, { id: product.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             await getuser();
@@ -52,12 +52,12 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
             setSnackbarSeverity('error')
             setSnackbarOpen(true)
         } finally {
-            setBtnLoading(false, () => { })
+            setBtnLoading(false)
         }
     }
 
     async function handelAddToCart(productId) {
-        setBtnLoading(true, () => { })
+        setBtnLoading(true)
         if (!isLogin) {
             router.push('/auth/signin')
             setSnackbarMessage('Please sign in to continue')
@@ -78,7 +78,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
                 setSnackbarSeverity('error')
                 setSnackbarOpen(true)
             } finally {
-                setBtnLoading(false, () => { })
+                setBtnLoading(false)
             }
         }
     }

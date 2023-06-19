@@ -18,6 +18,7 @@ module.exports = {
         cpassword: joi.ref('password'),
         image: joi.string().required(),
         cart: joi.array(),
+        orderHistory: joi.array(),
         address: joi.object({
             address: joi.string().max(200).required(),
             city: joi.string().required(),
