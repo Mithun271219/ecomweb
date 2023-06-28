@@ -101,3 +101,8 @@ body {
         transform: rotate(360deg);
     }
 }
+
+span {
+    user-select: none;
+    cursor: pointer;
+}
