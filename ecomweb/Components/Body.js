@@ -16,12 +16,12 @@ function Body({ products }) {
         )
     }
     return (
-        <div className='container'>
+        <div className='container d-flex flex-wrap justify-content-center gap-3'>
             {
                 products.map(mobile => {
                     return (
                         <Link key={mobile.id} href={`/products?productID=${mobile.id}&category=${mobile.category}`} >
-                            <Card className='card-container'>
+                            <Card className='card-container '>
                                 <CardActionArea >
                                     <CardMedia>
                                         <Image priority className='card-image' width={200} height={200} src={mobile.thumbnail} alt={mobile.title} />

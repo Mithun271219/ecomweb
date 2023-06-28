@@ -14,14 +14,14 @@ function SimilarProducts({ category, productsByCategory }) {
 
     return (
         <>
-            <Typography variant="h5" gutterBottom>
+            <Typography className='d-flex flex-wrap justify-content-center gap-2' variant="h5" gutterBottom>
                 Similar {category}
             </Typography>
             {
                 productsByCategory.map((mobile) => {
                     return (
                         <Link key={mobile.id} href={`/products?productID=${mobile.id}&category=${mobile.category}`}>
-                            <Card className='card-container' >
+                            <Card className='card-container y-2' >
                                 <CardActionArea >
                                     <CardMedia>
                                         <Image priority className='card-image' width={200} height={200} src={mobile.thumbnail} alt={mobile.title} />

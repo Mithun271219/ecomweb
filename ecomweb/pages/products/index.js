@@ -137,7 +137,7 @@ function product({ product, randomreviews, randomratings, productsByCategory }) 
                     Category : {product.category} <br />
                     Stock: {product.stock} <br />
                 </div>
-                <div className='container similar-products my-2'>
+                <div className='container similar-products my-2 '>
                     <SimilarProducts category={product.category} productsByCategory={productsByCategory} />
                 </div>
             </div>
