@@ -106,3 +106,11 @@ span {
     user-select: none;
     cursor: pointer;
 }
+
+.pagewrapper {
+    overflow: hidden;
+}
+
+.textdecoration {
+    text-decoration: none;
+}

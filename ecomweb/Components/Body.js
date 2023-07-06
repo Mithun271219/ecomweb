@@ -7,10 +7,11 @@ import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions, CircularProgress } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Link from 'next/link';
+import { GrFormNextLink, GrFormPreviousLink } from 'react-icons/gr';
 
 function Body({ products }) {
 
-    const [productsPerPage, setProductsPerPage] = useState(8);
+    const [productsPerPage, setProductsPerPage] = useState(16);
     let numberOfTotalPages = Math.ceil(products.length / productsPerPage);
     let pages = [...Array(numberOfTotalPages + 1).keys()].slice(1);
     const [currentPage, setcurrentPage] = useState(1);
@@ -37,20 +38,20 @@ function Body({ products }) {
                                         <CardMedia>
                                             <Image priority className='card-image' width={200} height={200} src={mobile.thumbnail} alt={mobile.title} />
                                             {/* loading='lazy' used inside Image tag to load the image lazely */}
-                                            <CardContent>
-                                                <Typography className='card-title' gutterBottom variant="h5" component="div">
+                                            <CardContent >
+                                                <Typography className='card-title textdecoration' gutterBottom variant="h5" component="div">
                                                     {mobile.title}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary">
+                                                <Typography variant="body2 textdecoration" color="text.secondary">
                                                     {mobile.brand}
                                                 </Typography>
-                                                <Typography className='inline-typo' variant="body2" color="green">
+                                                <Typography className='inline-typo textdecoration' variant="body2" color="green">
                                                     Min. {mobile.discountPercentage}%
                                                 </Typography>
-                                                <Typography className='inline-typo' variant="body2" color="text.secondary">
+                                                <Typography className='inline-typo textdecoration' variant="body2" color="text.secondary">
                                                     <s>{mobile.price}</s>
                                                 </Typography>
-                                                <Typography className='inline-typo' variant="button" display="block" gutterBottom>
+                                                <Typography className='inline-typo textdecoration' variant="button" display="block" gutterBottom>
                                                     {Math.round(mobile.price - (mobile.price * mobile.discountPercentage / 100))} $
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
@@ -68,13 +69,13 @@ function Body({ products }) {
             <div className='d-flex justify-content-center my-3'>
                 <nav className='Page navigation justify-content-center'>
                     <ul className='pagination'>
-                        <li className='page-item'><span className="page-link " onClick={() => { currentPage === 1 ? null : setcurrentPage(currentPage - 1) }}>{`<< prev`}</span></li>
+                        <li className='page-item'><span className="page-link " onClick={() => { currentPage === 1 ? null : setcurrentPage(currentPage - 1) }}>< GrFormPreviousLink style={{ color: 'blue' }} /></span></li>
                         {
                             pages.map((page) => {
                                 return <li className='page-item' key={page}><span className={currentPage === page ? "page-link active" : "page-link"} onClick={() => setcurrentPage(page)}>{page}</span></li>
                             })
                         }
-                        <li className='page-item'><span className="page-link" onClick={() => { currentPage === numberOfTotalPages ? null : setcurrentPage(currentPage + 1) }}>{`next >>`}</span></li>
+                        <li className='page-item'><span className="page-link" onClick={() => { currentPage === numberOfTotalPages ? null : setcurrentPage(currentPage + 1) }}>< GrFormNextLink style={{ color: 'blue' }} /></span></li>
                     </ul>
                 </nav>
             </div>
