@@ -46,7 +46,7 @@ function Body({ products }) {
                                                     {mobile.brand}
                                                 </Typography>
                                                 <Typography className='inline-typo textdecoration' variant="body2" color="green">
-                                                    Min. {mobile.discountPercentage}%
+                                                    Min. Discount {mobile.discountPercentage}%
                                                 </Typography>
                                                 <Typography className='inline-typo textdecoration' variant="body2" color="text.secondary">
                                                     <s>{mobile.price}</s>

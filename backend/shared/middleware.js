@@ -12,11 +12,11 @@ module.exports = {
             // const decoded = jwt.verify(token, process.env.JWT_SECRET);
             // req.user = decoded;
             // next();
-            if (!req.headers && !req.headers.authorization) {
+            if (!req.headers || !req.headers.authorization) {
                 return res.status(403).json({ message: "user is not uthorizes 1" })
             }
             const [tokenType, token] = req.headers.authorization.split(' ');
-            if (tokenType !== 'Bearer' && !token) {
+            if (tokenType !== 'Bearer' || !token) {
                 return res.status(403).json({ message: "user is not uthorizes 2" })
             }
             try {
