@@ -6,7 +6,7 @@ import { Container, Button, TextField, CircularProgress } from '@mui/material'
 import axios from 'axios'
 import Context from '@/Components/Context/Context'
 
-function forgetpassword() {
+function otpValidation() {
 
     let router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ function forgetpassword() {
 
 
     let initialValues = {
-        username: ''
+        otp: ''
     }
 
     let { values, handleBlur, handleChange, handleSubmit, isValid, errors, touched } = useFormik({
@@ -25,7 +25,7 @@ function forgetpassword() {
                 setLoading(true)
                 let { data } = await axios.post(`${backendLink}/users/username`, values)
                 // resetForm();
-                router.push(`/auth/forgetpassword/reset/otpvalidation`)
+                router.push(`/auth/forgetpassword/reset/${data.username}`)
             } catch ({ response: { data: { message } } }) {
                 errors.username = message
             } finally {
@@ -41,13 +41,13 @@ function forgetpassword() {
                 loading ? <div className="productsSpinners">< CircularProgress /></div> :
                     <Container className='signinform'>
                         <form onSubmit={handleSubmit}>
-                            <h4>Enter the username inside the below text filed</h4>
+                            <h4>Enter the OTP sent to registered email</h4>
                             <Container >
                                 <div>
-                                    <TextField variant='standard' className='my-3' name='username' value={values.username} label='username' onChange={handleChange} onBlur={handleBlur} type='text' error={touched.username && Boolean(errors.username)} helperText={touched.username && errors.username} />
+                                    <TextField variant='standard' className='my-3' name='otp' value={values.otp} label='otp' onChange={handleChange} onBlur={handleBlur} type='text' error={touched.otp && Boolean(errors.otp)} helperText={touched.otp && errors.otp} />
                                 </div>
                                 <div>
-                                    <Button type='submit' variant='contained'>Get OTP</Button>
+                                    <Button type='submit' variant='contained'>Validate OTP</Button>
                                 </div>
                             </Container>
                         </form>
@@ -57,4 +57,4 @@ function forgetpassword() {
     )
 }
 
-export default forgetpassword
+export default otpValidation

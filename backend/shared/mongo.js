@@ -4,6 +4,7 @@ module.exports = {
     db: null,
     products: null,
     users: null,
+    OneTimePass: null,
 
     async connect() {
 
@@ -20,6 +21,7 @@ module.exports = {
             //paths
             this.products = await this.db.collection('products');
             this.users = await this.db.collection('users');
+            this.OneTimePass = await this.db.collection('otps');
             console.log(`mogno collection initilized`);
         } catch (error) {
             throw new Error(error);

@@ -1,6 +1,10 @@
 const { ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
 
+const { sendMail } = require('../shared/nodeMailer');
+const otpgen = require('otp-generator');
+const { date } = require('joi');
+
 module.exports = {
     async getAllUsers(req, res) {
         try {
@@ -95,21 +99,55 @@ module.exports = {
             res.status(500).json({ message: 'error while altering quantity' });
         }
     },
+
+    //this is part of password reset
     async getusername(req, res) {
+        const OneTimePass = otpgen.generate(4, { digits: true, specialChars: false, upperCaseAlphabets: false, lowerCaseAlphabets: false })
+
         try {
             let data = await this.users.findOne({ username: req.body.username });
-            res.json({ username: data.username })
+            if (data) {
+                await sendMail(data.email, data.firstName, OneTimePass, async (error, info) => {
+                    if (error) {
+                        res.status(500).json({ error: 'Failed to send OTP email' });
+                    } else {
+                        let isUser = await this.OneTimePass.findOne({ username: data.username })
+                        if (isUser) {
+                            await this.OneTimePass.findOneAndUpdate({ username: isUser.username }, { $set: { otp: OneTimePass, timeStamp: new Date().toLocaleString() } })
+                            res.json({ username: data.username, message: 'OTP sent successfully' });
+                        } else {
+                            await this.OneTimePass.insertOne({ username: data.username, otp: OneTimePass, timeStamp: new Date().toLocaleString() })
+                            res.json({ username: data.username, message: 'OTP sent successfully' });
+                        }
+                    }
+                })
+            }
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: 'username not exist' });
         }
     },
+
+    async validateOTP(req, res) {
+        try {
+            let isValidOTP = await this.OneTimePass.findOne({ username: req.params.username, otp: req.body.otp });
+            if (isValidOTP) {
+                res.json({ message: "OTP is valid", OTPValidation: true })
+            } else {
+                res.status(400).json({ message: "Invalid OTP" })
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message: 'error validating the OTP' });
+        }
+    },
+
     async resetPassword(req, res) {
         try {
             req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt());
             delete req.body.cpassword
-            await this.users.findOneAndUpdate({ username: req.params.username }, { $set: { password: req.body.password, timeStamp: new Date().toLocaleString() } });
-            res.json({ message: "pssword changed!." })
+            // await this.users.findOneAndUpdate({ username: req.params.username }, { $set: { password: req.body.password, timeStamp: new Date().toLocaleString() } });
+            // res.json({ message: "pssword changed!." })
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "error while resetting password" })
