@@ -109,6 +109,7 @@ module.exports = {
             if (data) {
                 await sendMail(data.email, data.firstName, OneTimePass, async (error, info) => {
                     if (error) {
+                        console.log('error is ', error)
                         res.status(500).json({ error: 'Failed to send OTP email' });
                     } else {
                         let isUser = await this.OneTimePass.findOne({ username: data.username })
