@@ -24,9 +24,9 @@ function otpValidation() {
             // console.log(values)
             try {
                 setLoading(true)
-                await axios.post(`${backendLink}/users/otpvalidation/${query.userotp}`, values)
+                let { data } = await axios.post(`${backendLink}/users/otpvalidation/${query.userotp}`, values)
                 // resetForm();
-                router.push(`/auth/forgetpassword/reset/${query.userotp}`)
+                router.push(`/auth/forgetpassword/reset/${query.userotp}?isvalidotp=${data.OTPValidation}`)
                 // if (data) {
                 // } else {
 

@@ -33,7 +33,7 @@ function reset() {
         onSubmit: async (values, { resetForm }) => {
             try {
                 setLoading(true)
-                let response = await axios.put(`${backendLink}/users/reset/password/${query.username}`, values)
+                let response = await axios.put(`${backendLink}/users/reset/password/${query.username}?isvalidotp=${query.isvalidotp}`, values)
                 // resetForm();
                 setSnackbarMessage(response.data.message)
                 setSnackbarSeverity('success')
