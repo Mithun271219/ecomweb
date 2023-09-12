@@ -124,7 +124,7 @@ module.exports = {
                 })
             } else {
                 console.log(error)
-                res.status(500).json({ message: 'username not exist' });
+                res.status(400).json({ message: 'username not exist' });
             }
         } catch (error) {
             console.log(error)
