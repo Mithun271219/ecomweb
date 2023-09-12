@@ -156,9 +156,12 @@ module.exports = {
     },
 
     async validateOTP(req, res) {
+        const OneTimePass = otpgen.generate(4, { digits: true, specialChars: false, upperCaseAlphabets: false, lowerCaseAlphabets: false })
+
         try {
             let isValidOTP = await this.OneTimePass.findOne({ username: req.params.username, otp: req.body.otp });
             if (isValidOTP) {
+                await this.OneTimePass.findOneAndUpdate({ username: isValidOTP.username }, { $set: { otp: OneTimePass, timeStamp: new Date().toLocaleString() } })
                 res.json({ message: "OTP is valid", OTPValidation: true })
             } else {
                 res.status(400).json({ message: "Invalid OTP" })
@@ -171,10 +174,14 @@ module.exports = {
 
     async resetPassword(req, res) {
         try {
-            req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt());
-            delete req.body.cpassword
-            // await this.users.findOneAndUpdate({ username: req.params.username }, { $set: { password: req.body.password, timeStamp: new Date().toLocaleString() } });
-            // res.json({ message: "pssword changed!." })
+            if (req.query.isvalidotp) {
+                req.body.password = await bcrypt.hash(req.body.password, await bcrypt.genSalt());
+                delete req.body.cpassword
+                await this.users.findOneAndUpdate({ username: req.params.username }, { $set: { password: req.body.password, timeStamp: new Date().toLocaleString() } });
+                res.json({ message: "pssword changed!." })
+            } else {
+                res.status(400).json({ message: "OTP is required for resetting the password" })
+            }
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "error while resetting password" })

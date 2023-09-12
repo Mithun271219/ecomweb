@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react'
 import { useFormik } from 'formik'
-import { usernamevalidation } from '@/Components/Schemas/ForgetPassword/Username-val-schema'
-import { useRouter } from 'next/router'
+import { userOTP } from '@/Components/Schemas/ForgetPassword/User-OTP-Val-schema'
+import router, { useRouter } from 'next/router'
 import { Container, Button, TextField, CircularProgress } from '@mui/material'
 import axios from 'axios'
 import Context from '@/Components/Context/Context'
 
 function otpValidation() {
 
-    let router = useRouter();
+    let { query } = useRouter();
     const [loading, setLoading] = useState(false);
     let { backendLink } = useContext(Context)
 
@@ -19,17 +19,22 @@ function otpValidation() {
 
     let { values, handleBlur, handleChange, handleSubmit, isValid, errors, touched } = useFormik({
         initialValues,
-        validationSchema: usernamevalidation,
+        validationSchema: userOTP,
         onSubmit: async (values, { resetForm }) => {
+            // console.log(values)
             try {
                 setLoading(true)
-                let { data } = await axios.post(`${backendLink}/users/otpvalidation/${query.userotp}`, values)
+                await axios.post(`${backendLink}/users/otpvalidation/${query.userotp}`, values)
                 // resetForm();
-                router.push(`/auth/forgetpassword/reset/${data.username}`)
+                router.push(`/auth/forgetpassword/reset/${query.userotp}`)
+                // if (data) {
+                // } else {
+
+                // }
             } catch ({ response: { data: { message } } }) {
-                errors.username = message
+                errors.otp = message
             } finally {
-                setTimeout(() => setLoading(false), 500)
+                setTimeout(() => setLoading(false), 1000)
             }
         }
     })
@@ -47,7 +52,7 @@ function otpValidation() {
                                     <TextField variant='standard' className='my-3' name='otp' value={values.otp} label='otp' onChange={handleChange} onBlur={handleBlur} type='text' error={touched.otp && Boolean(errors.otp)} helperText={touched.otp && errors.otp} />
                                 </div>
                                 <div>
-                                    <Button type='submit' variant='contained'>Validate OTP</Button>
+                                    <Button type='submit' variant='contained' disabled={!isValid}>Validate OTP</Button>
                                 </div>
                             </Container>
                         </form>
