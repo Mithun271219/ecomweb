@@ -104,51 +104,54 @@ module.exports = {
     async getusername(req, res) {
         const OneTimePass = otpgen.generate(4, { digits: true, specialChars: false, upperCaseAlphabets: false, lowerCaseAlphabets: false })
 
-        // try {
-        //     let data = await this.users.findOne({ username: req.body.username });
-        //     if (data) {
-        //         await sendMail(data.email, data.firstName, OneTimePass, async (error, info) => {
-        //             if (error) {
-        //                 console.log('error is ', error)
-        //                 res.status(500).json({ error: 'Failed to send OTP email' });
-        //             } else {
-        //                 let isUser = await this.OneTimePass.findOne({ username: data.username })
-        //                 if (isUser) {
-        //                     await this.OneTimePass.findOneAndUpdate({ username: isUser.username }, { $set: { otp: OneTimePass, timeStamp: new Date().toLocaleString() } })
-        //                     res.json({ username: data.username, message: 'OTP sent successfully' });
-        //                 } else {
-        //                     await this.OneTimePass.insertOne({ username: data.username, otp: OneTimePass, timeStamp: new Date().toLocaleString() })
-        //                     res.json({ username: data.username, message: 'OTP sent successfully' });
-        //                 }
-        //             }
-        //         })
-        //     }
-        // } catch (error) {
-        //     console.log(error)
-        //     res.status(500).json({ message: 'username not exist' });
-        // }
-        let data = await this.users.findOne({ username: req.body.username })
-            .then(async (response) => {
+        try {
+            let data = await this.users.findOne({ username: req.body.username });
+            if (data) {
                 await sendMail(data.email, data.firstName, OneTimePass, async (error, info) => {
                     if (error) {
                         console.log('error is ', error)
                         res.status(500).json({ error: 'Failed to send OTP email' });
                     } else {
-                        let isUser = await this.OneTimePass.findOne({ username: response.username })
+                        let isUser = await this.OneTimePass.findOne({ username: data.username })
                         if (isUser) {
                             await this.OneTimePass.findOneAndUpdate({ username: isUser.username }, { $set: { otp: OneTimePass, timeStamp: new Date().toLocaleString() } })
                             res.json({ username: data.username, message: 'OTP sent successfully' });
                         } else {
-                            await this.OneTimePass.insertOne({ username: response.username, otp: OneTimePass, timeStamp: new Date().toLocaleString() })
+                            await this.OneTimePass.insertOne({ username: data.username, otp: OneTimePass, timeStamp: new Date().toLocaleString() })
                             res.json({ username: data.username, message: 'OTP sent successfully' });
                         }
                     }
                 })
-            })
-            .catch((error) => {
+            } else {
                 console.log(error)
                 res.status(500).json({ message: 'username not exist' });
-            })
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ message: 'username not exist' });
+        }
+        // let data = await this.users.findOne({ username: req.body.username })
+        //     .then(async (response) => {
+        //         await sendMail(data.email, data.firstName, OneTimePass, async (error, info) => {
+        //             if (error) {
+        //                 console.log('error is ', error)
+        //                 res.status(500).json({ error: 'Failed to send OTP email' });
+        //             } else {
+        //                 let isUser = await this.OneTimePass.findOne({ username: response.username })
+        //                 if (isUser) {
+        //                     await this.OneTimePass.findOneAndUpdate({ username: isUser.username }, { $set: { otp: OneTimePass, timeStamp: new Date().toLocaleString() } })
+        //                     res.json({ username: data.username, message: 'OTP sent successfully' });
+        //                 } else {
+        //                     await this.OneTimePass.insertOne({ username: response.username, otp: OneTimePass, timeStamp: new Date().toLocaleString() })
+        //                     res.json({ username: data.username, message: 'OTP sent successfully' });
+        //                 }
+        //             }
+        //         })
+        //     })
+        //     .catch((error) => {
+        //         console.log(error)
+        //         res.status(500).json({ message: 'username not exist' });
+        //     })
 
     },
 
