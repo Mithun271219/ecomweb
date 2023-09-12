@@ -23,7 +23,7 @@ function otpValidation() {
         onSubmit: async (values, { resetForm }) => {
             try {
                 setLoading(true)
-                let { data } = await axios.post(`${backendLink}/users/username`, values)
+                let { data } = await axios.post(`${backendLink}/users/otpvalidation/${query.userotp}`, values)
                 // resetForm();
                 router.push(`/auth/forgetpassword/reset/${data.username}`)
             } catch ({ response: { data: { message } } }) {

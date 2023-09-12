@@ -24,13 +24,13 @@ function forgetpassword() {
             try {
                 // setLoading(true)
                 let { data } = await axios.post(`${backendLink}/users/username`, values)
-                console.log(data)
+                // console.log(data)
                 // resetForm();
-                // if (data) {
-                //     router.push(`/auth/forgetpassword/reset/otpvalidation`)
-                // } else {
-                //     router.push(`/auth/forgetpassword/`)
-                // }
+                if (data) {
+                    router.push(`/auth/forgetpassword/reset/otpvalidation/${data.username}`)
+                } else {
+                    router.push(`/auth/forgetpassword/th`)
+                }
             } catch ({ response: { data: { message } } }) {
                 errors.username = message
             } finally {
